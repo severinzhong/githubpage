@@ -3,18 +3,18 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const [clickerCount , setClickerCount] = useState(0) ;
-  
-  useEffect(()=>{
+  const [clickerCount, setClickerCount] = useState(0);
+
+  useEffect(() => {
     let installPrompt = null;
     const installButton = document.querySelector("#install");
-  
+
     window.addEventListener("beforeinstallprompt", (event) => {
       event.preventDefault();
       installPrompt = event;
       installButton.removeAttribute("hidden");
     });
-  
+
     installButton.addEventListener("click", async () => {
       if (!installPrompt) {
         return;
@@ -24,13 +24,13 @@ function App() {
       installPrompt = null;
       installButton.setAttribute("hidden", "");
     });
-  },[])
+  }, [])
 
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" onClick={()=>{setClickerCount(clickerCount + 1)}} />
+        <img src={logo} className="App-logo" alt="logo" onClick={() => { setClickerCount(clickerCount + 1) }} />
         <p>
           Edit <code>src/App.js</code> and save to reload.<br></br>
         </p>
