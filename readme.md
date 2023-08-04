@@ -2,6 +2,8 @@
 
 实验项目用于实践react,PWA,js在github pages的应用
 
+[github pages](https://severinzhong.github.io/githubpage/)
+
 ## 踩坑记录
 
 ### npm run deploy 失败
