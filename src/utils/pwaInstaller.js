@@ -16,7 +16,6 @@ export function PWAInstallButton(){
           const result = await installPrompt.prompt();
           console.log(`Install prompt was: ${result.outcome}`);
           installPrompt = null;
-          buttonRef.current.setAttribute("hidden", "");
     }
 
     useEffect(
@@ -26,7 +25,6 @@ export function PWAInstallButton(){
             window.addEventListener("beforeinstallprompt", (event) => {
                 event.preventDefault();
                 installPrompt = event;
-                buttonRef.current.removeAttribute("hidden");
               });
         }
         if(buttonRef.current){    
@@ -40,6 +38,6 @@ export function PWAInstallButton(){
     ,[buttonRef])
 
     return (
-        <button ref={buttonRef} hidden>Install</button>
+        <button ref={buttonRef} >PWA Install</button>
     )
 }
