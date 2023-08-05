@@ -1,0 +1,26 @@
+.Timer{
+    position: relative;
+    width: 50vw;
+    height: 50vw;
+    display: flex;
+    flex-direction: column;
+    background-color: antiquewhite;
+    border-radius: 5vw;
+    
+}
+
+.TimerButton{
+    min-width: 25vw ;
+    min-height: 5vw;
+    background-color: rgb(174, 205, 205);
+    border-radius: 2vw;
+    border: 0 solid black;
+}
+
+.TimerButton:hover{
+    background-color: azure;
+}
+
+.TimerButton:active{
+    border: 2 solid black;
+}

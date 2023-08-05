@@ -26,6 +26,8 @@ fullscreenButton.addEventListener("click",toggleFullscreen);  //成功
 
 全屏操作不能用onclick在组件上进行绑定，会被浏览器认为是不合法行为
 
+另外，使用useEffect之后onClick必然失败，只能使用addEventListener，不确定原因，暂时记下
+
 ### Failed to execute 'prompt' on 'BeforeInstallPromptEvent': The prompt() method must be called with a user gesture
 
 PWA 安装至主页，绑定按钮报错，已经按照教程进行了，但是调试依旧报错（但是手机PC都能正确安装，先不管了）

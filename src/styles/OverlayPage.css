@@ -1,0 +1,50 @@
+.OverlayPage{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+  }
+  
+  .OverlayPageButton{
+    min-width: 100px;
+    min-height: 25px;
+    background-color: #adc0c7;
+    border-radius: 10px;
+    border:2px ;
+  }
+  
+  .OverlayPageButton:hover,.OverlayPagecloseButton:hover{
+    background-color: #cad5d9;
+  }
+  
+  .OverlayPageButton:active{
+    min-width: 110px;
+    min-height: 27px;
+    border:2px solid rgb(166, 172, 172);
+  }
+
+  .OverlayPagecloseButton{
+    position: fixed;
+    right:5vw;
+    top:5vW;
+    z-index: 10;
+    min-width: 10vw;
+    min-height: 10vw;
+    border-radius: 5vw;
+  }
+
+  .OverlayPagecloseButton:active{
+    min-width: 12vw;
+    min-height: 12vW;
+    right:4vw;
+    top:4vW;
+    border-radius: 6vw;
+    border:2px solid rgb(166, 172, 172);
+  }

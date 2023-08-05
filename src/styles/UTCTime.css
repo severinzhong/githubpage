@@ -1,0 +1,19 @@
+.UTCTime{
+    background-color: rgb(206, 178, 233);
+    width: 50vw;
+    height: 20vw;
+    padding: 5vw;
+    border-radius: 2vw;
+}
+
+.UTCTimeButton{
+    min-width: 25vw ;
+    min-height: 5vw;
+    background-color: rgb(143, 86, 196);
+    border-radius: 2vw;
+    border: 0 solid black;
+}
+
+.UTCTimeButton:hover{
+    background-color: rgb(156, 114, 196);
+}
