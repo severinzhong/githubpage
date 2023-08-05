@@ -17,10 +17,8 @@ export function OverlayPage(props) {
         <button className="OverlayPageButton" onClick={handleClick}>{props.name}</button>
         {showOverlay && (
           <div className="OverlayPage">
-              <div>{props.component}</div>
-              <div> 
-                  <button className="OverlayPagecloseButton" onClick={handleClose}>X</button>
-              </div>
+              {props.component}
+              <button className="OverlayPagecloseButton" onClick={handleClose}>X</button>
           </div>)}
       </div>
     );

@@ -1,16 +1,27 @@
+:root {
+    --aspect-ratio : calc(3/4) ;
+    --base-w: 1vw ; /* 基础值 保持3/4的屏幕比*/
+    --base-h: calc(1vw / var(--aspect-ratio)) ;
+    @media (min-aspect-ratio: 3/4){
+        --base-w : calc(1vh *var(--aspect-ratio)) ; 
+        --base-h : 1vh ;
+    }
+  }
+
+
 .UTCTime{
     background-color: rgb(206, 178, 233);
-    width: 50vw;
-    height: 20vw;
-    padding: 5vw;
-    border-radius: 2vw;
+    width: calc(var(--base-w)*50);
+    height: calc(var(--base-w)*20);
+    padding: calc(var(--base-w)*5);
+    border-radius: calc(var(--base-w)*2);
 }
 
 .UTCTimeButton{
-    min-width: 25vw ;
-    min-height: 5vw;
+    min-width: calc(var(--base-w)*25);;
+    min-height: calc(var(--base-w)*5);
     background-color: rgb(143, 86, 196);
-    border-radius: 2vw;
+    border-radius: calc(var(--base-w)*2);
     border: 0 solid black;
 }
 

@@ -1,19 +1,28 @@
+:root {
+    --aspect-ratio : calc(3/4) ;
+    --base-w: 1vw ; /* 基础值 保持3/4的屏幕比*/
+    --base-h: calc(1vw / var(--aspect-ratio)) ;
+    @media (min-aspect-ratio: 3/4){
+        --base-w : calc(1vh *var(--aspect-ratio)) ; 
+        --base-h : 1vh ;
+    }
+  }
+
 .Timer{
-    position: relative;
-    width: 50vw;
-    height: 50vw;
+    position: absolute;
+    width: calc(var(--base-w)*50);
+    height: calc(var(--base-w)*50);
     display: flex;
     flex-direction: column;
     background-color: antiquewhite;
     border-radius: 5vw;
-    
 }
 
 .TimerButton{
-    min-width: 25vw ;
-    min-height: 5vw;
+    min-width: calc(var(--base-w)*25);
+    min-height: calc(var(--base-w)*5);
     background-color: rgb(174, 205, 205);
-    border-radius: 2vw;
+    border-radius: calc(var(--base-w)*2);
     border: 0 solid black;
 }
 
@@ -22,5 +31,5 @@
 }
 
 .TimerButton:active{
-    border: 2 solid black;
+    border: 2px solid black;
 }

@@ -43,3 +43,19 @@ installButton.addEventListener("click", async () => {
       installButton.setAttribute("hidden", "");
     });
 ```
+
+## :root属性选择器
+
+```css
+:root {
+  --aspect-ratio : calc(3/4) ;
+  --base-w: 1vw ; /* 基础值 保持3/4的屏幕比*/
+  --base-h: calc(1vw / var(--aspect-ratio)) ;
+  @media (min-aspect-ratio: 3/4){
+      --base-w : calc(1vh *var(--aspect-ratio)) ; 
+      --base-h : 1vh ;
+  }
+}
+```
+属性选择器:root以最子节点的属性为准，min-aspect-ratio: 只能用3/4不能用calc(3/4)
+

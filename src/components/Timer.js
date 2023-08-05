@@ -13,6 +13,7 @@ export function Timer(){
     useEffect(()=>{
         function reset(){
             timer = 0 ;
+            isStart = false ; 
             setClockTime(0.0)
             setButtonStr("STRAT")
         }

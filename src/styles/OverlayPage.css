@@ -1,23 +1,33 @@
+:root {
+  --aspect-ratio : calc(3/4) ;
+  --base-w: 1vw ; /* 基础值 保持3/4的屏幕比*/
+  --base-h: calc(1vw / var(--aspect-ratio)) ;
+  @media (min-aspect-ratio: 3/4){
+      --base-w : calc(1vh *var(--aspect-ratio)) ; 
+      --base-h : 1vh ;
+  }
+}
+
 .OverlayPage{
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     z-index: 9;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
+    width: calc(var(--base-w)*100);
+    height: calc(var(--base-h)*100);
+    top: calc(50vh - calc(var(--base-h)*50));
+    left:calc(50vw - calc(var(--base-w)*50));
   }
   
   .OverlayPageButton{
-    min-width: 100px;
-    min-height: 25px;
+    min-width: calc(var(--base-w)*25);
+    min-height: calc(var(--base-w)*6);
     background-color: #adc0c7;
-    border-radius: 10px;
-    border:2px ;
+    border-radius: calc(var(--base-w)*2);
+    border:calc(var(--base-w)*2) ;
   }
   
   .OverlayPageButton:hover,.OverlayPagecloseButton:hover{
@@ -25,26 +35,27 @@
   }
   
   .OverlayPageButton:active{
-    min-width: 110px;
-    min-height: 27px;
-    border:2px solid rgb(166, 172, 172);
+    min-width: calc(var(--base-w)*25) ;
+    min-height: calc(var(--base-w)*6);
+    border:1px solid rgb(166, 172, 172);
   }
 
   .OverlayPagecloseButton{
-    position: fixed;
-    right:5vw;
-    top:5vW;
+    font-size: calc(var(--base-w)*6);
+    position: absolute;
+    right:calc(var(--base-w)*5);
+    top:calc(var(--base-w)*5);
     z-index: 10;
-    min-width: 10vw;
-    min-height: 10vw;
-    border-radius: 5vw;
+    min-width: calc(var(--base-w)*10);
+    min-height: calc(var(--base-w)*10);
+    border-radius: calc(var(--base-w)*5);
   }
 
   .OverlayPagecloseButton:active{
-    min-width: 12vw;
-    min-height: 12vW;
-    right:4vw;
-    top:4vW;
-    border-radius: 6vw;
+    min-width: calc(var(--base-w)*12);
+    min-height: calc(var(--base-w)*12);
+    right:calc(var(--base-w)*4);
+    top:calc(var(--base-w)*4);
+    border-radius: calc(var(--base-w)*6);
     border:2px solid rgb(166, 172, 172);
   }

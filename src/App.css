@@ -1,5 +1,18 @@
+:root {
+  --aspect-ratio : calc(3/4) ;
+  --base-w: 1vw ; /* 基础值 保持3/4的屏幕比*/
+  --base-h: calc(1vw / var(--aspect-ratio)) ;
+  @media (min-aspect-ratio: 3/4){
+      --base-w : calc(1vh *var(--aspect-ratio)) ; 
+      --base-h : 1vh ;
+  }
+}
+
 .App {
   text-align: center;
+  margin:auto;
+  width: calc(var(--base-w)*100);
+  height: calc(var(--base-h)*100);
 }
 
 .App-logo {
@@ -31,6 +44,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
