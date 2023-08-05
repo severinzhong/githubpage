@@ -14,7 +14,9 @@ export function OverlayPage(props) {
   
     return (
       <div>
-        <button className="OverlayPageButton" onClick={handleClick}>{props.name}</button>
+        <button className="OverlayPageButton" onClick={handleClick}>
+          {props.name ? props.name : props.component.type.name}
+        </button>
         {showOverlay && (
           <div className="OverlayPage">
               {props.component}

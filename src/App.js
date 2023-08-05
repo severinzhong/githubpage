@@ -15,8 +15,8 @@ function App() {
         <p >
           Click the logo <br></br> {clickerCount}
         </p>
-        <OverlayPage name="Timer" component={<Timer />}/>
-        <OverlayPage name="UTC Time" component={<UTCTime />}/>
+        <OverlayPage component={<Timer />}/>
+        <OverlayPage component={<UTCTime />}/>
       </header>
     </div>
   );

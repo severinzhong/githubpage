@@ -4,6 +4,34 @@
 
 [github pages](https://severinzhong.github.io/githubpage/)
 
+## 组件介绍
+
+### Timer
+
+一个简单的计时器组件，用来实践基础功能
+
+### FullscreenButton
+
+确认是否具备全屏能力（手机下似乎会自动横屏，还需要修改[TODO]）
+
+### UTCTime
+
+获取国际标准时间，确认github page是否具备接受发送请求的能力。
+
+### PWAInstallButton
+
+一个请求PWA安装到桌面的按钮，实验是否具备主动安装能力（PWA在首次网站入后会自动询问用户，可以不使用此按钮）
+
+### OverlayPage
+
+一个遮罩页面配合一个进入和关闭的按钮，实现多个应用在同一个页面上实现和使用。
+
+使用方法：
+
+```js
+<OverlayPage name="Get UTC !" component={<UTCTime />}/>
+```
+
 ## 踩坑记录
 
 ### npm run deploy 失败
