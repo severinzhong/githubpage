@@ -1,0 +1,69 @@
+:root {
+    --aspect-ratio: calc(3/4);
+    --base-w: 1vw;
+    /* 基础值 保持3/4的屏幕比*/
+    --base-h: calc(1vw / var(--aspect-ratio));
+
+    @media (min-aspect-ratio: 3/4) {
+        --base-w: calc(1vh *var(--aspect-ratio));
+        --base-h: 1vh;
+    }
+}
+
+.TodoList {
+    background-color: rgb(149, 188, 214);
+    width: calc(var(--base-w)*80);
+    height: calc(var(--base-w)*100);
+    border-radius: 10px;
+}
+
+.TodoListInput{
+    border: 0px solid black;
+    padding: 5px;
+}
+
+.TodoListInput input{
+    border-radius: 5px;
+    width: calc(var(--base-w)*55);
+    height: calc(var(--base-w)*5);;
+}
+
+.TodoListInput button{
+    width: calc(var(--base-w)*15);
+    height: calc(var(--base-w)*6.5);
+    background-color: rgb(71, 149, 201);
+    border: 0;
+    border-radius: calc(var(--base-w)*2);
+    margin-left: calc(var(--base-w)*3);
+}
+
+.TodoListLine {
+    display: inline-flex;
+    text-align: left;
+    font-size: calc(var(--base-w)*3);
+    padding-top: 5px;
+    border: 0px solid black;
+    width: calc(var(--base-w)*75);
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.TodoListLine p{
+    width: calc(var(--base-w)*60);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.TodoListLine button{
+    background-color: rgb(71, 149, 201);
+    height: calc(var(--base-w)*6.5);
+    border: 0;
+    border-radius: calc(var(--base-w)*2);
+    margin-left: 5px;
+  }
+
+.TodoListComplete{
+    margin-left:auto;
+  }
