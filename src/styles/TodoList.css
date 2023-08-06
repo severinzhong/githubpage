@@ -18,13 +18,16 @@
 }
 
 .TodoListInput{
+    display: inline-flex;
     border: 0px solid black;
+    width: calc(var(--base-w)*75);
     padding: 5px;
 }
 
 .TodoListInput input{
     border-radius: 5px;
-    width: calc(var(--base-w)*55);
+    flex-grow: 1;
+    flex-shrink: 1;
     height: calc(var(--base-w)*5);;
 }
 
@@ -40,7 +43,7 @@
 .TodoListLine {
     display: inline-flex;
     text-align: left;
-    font-size: calc(var(--base-w)*3);
+    font-size: 16px;
     padding-top: 5px;
     border: 0px solid black;
     width: calc(var(--base-w)*75);
@@ -49,11 +52,11 @@
 }
 
 .TodoListLine p{
-    width: calc(var(--base-w)*60);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-grow: 1;
 }
 
 .TodoListLine button{
@@ -62,8 +65,4 @@
     border: 0;
     border-radius: calc(var(--base-w)*2);
     margin-left: 5px;
-  }
-
-.TodoListComplete{
-    margin-left:auto;
   }

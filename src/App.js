@@ -5,6 +5,7 @@ import { UTCTime} from './components/UTCTime'
 import { OverlayPage } from './components/OverlayPage';
 import { Timer } from './components/Timer';
 import {TodoList} from './components/TodoList'
+import { GameManager } from './game/game';
 function App() {
   const [clickerCount, setClickerCount] = useState(0);
 
@@ -15,9 +16,10 @@ function App() {
         <p >
           Click the logo <br></br> {clickerCount}
         </p>
-        <OverlayPage component={<Timer />}/>
-        <OverlayPage component={<UTCTime />}/>
-        <OverlayPage component={<TodoList/>}/>
+        <OverlayPage name="Timer"  component={<Timer />}/>
+        <OverlayPage name ="UTC Time" component={<UTCTime />}/>
+        <OverlayPage name="Todo List" component={<TodoList/>}/>
+        <OverlayPage name="Game" component={<GameManager/>}/>
       </header>
     </div>
   );

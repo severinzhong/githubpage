@@ -45,6 +45,7 @@ export function TodoList() {
   
     return (
       <div className="TodoList">
+        <div>Todo List</div>
         <div className="TodoListInput">
           <input  value={inputValue} onChange={handleInputChange} />
           <button onClick={handleAddTodo}>Submit</button>
@@ -59,7 +60,7 @@ export function TodoList() {
                 title={todo.text}
                 style={{ textDecoration: todo.completed ? "line-through" : "" }}
               >{ todo.text}</p>
-              <button className="TodoListComplete" onClick={() => handleToggleComplete(index)}>
+              <button onClick={() => handleToggleComplete(index)}>
                 {todo.completed ? "Undo" : "Done"}
               </button>
               <button  onClick={() => handleDelete(index)}>

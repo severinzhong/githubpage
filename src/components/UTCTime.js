@@ -5,7 +5,7 @@ export function UTCTime() {
     const [currentTime, setCurrentTime] = useState("00:00:00");
     const buttonRef = useRef()
     const fetchTime = () => {
-      fetch("http://worldtimeapi.org/api/timezone/Etc/UTC")
+      fetch("https://worldtimeapi.org/api/timezone/Etc/UTC")
         .then((response) => response.json())
         .then((data) => {
           const currentTime = new Date(data.utc_datetime);

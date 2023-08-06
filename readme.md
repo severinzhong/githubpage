@@ -8,7 +8,7 @@
 
 ### Timer
 
-一个简单的计时器组件，用来实践基础功能
+一个简单的计时器组件，用来实践基础功能,尝试requstAniamtionFrame
 
 ### FullscreenButton
 
@@ -33,7 +33,7 @@
 ```
 ### TodoList
 
-实验本地存储能力
+实验本地存储能力,实验css felx布局
 
 ## 踩坑记录
 
@@ -89,4 +89,18 @@ installButton.addEventListener("click", async () => {
 }
 ```
 属性选择器:root以最子节点的属性为准，min-aspect-ratio: 只能用3/4不能用calc(3/4)
+
+### 状态更新
+
+```js
+const dpsFn = function (delta) {
+    setDamage((prevDamage) => prevDamage + delta); 
+    // 使用函数形式更新状态，确保正确更新
+  };
+const dpsFn = function (delta){ 
+        setDamage(damage + delta );
+        //函数组件中，状态更新是异步的，并且在更新函数被调用之后，并不立即改变状态值。这导致多个更新操作实际上是基于相同的初始状态进行计算，因此只有最后一次更新会应用到状态上。
+    }
+
+```
 
