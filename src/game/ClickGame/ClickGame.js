@@ -4,52 +4,97 @@ import { Monster } from "./monster";
 export function ClickGame() {
     const size = 45;
     const [monster, setMonster] = useState(new Monster(size));
-    const draw= useRef(0)
-    const tileSize = 10;
+    const [scheme, setScheme] = useState(monster.scheme);
+    const [monsterName,SetMonsterName] = useState(monster.name);
+    const draw = useRef(0)
+    const tileSize = 6;
     const canvasRef = useRef();
     const ctxRef = useRef(null);
-
+    const frameRequest = useRef(null)
     function drawTile(x, y, color) {
-        if(ctxRef){
-        if (!color) {
-            color = `rgb(255,255,255)`;
-        }
-        ctxRef.current.fillStyle = color;
-        ctxRef.current.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-        }else console.log("no ref");
+        if (ctxRef) {
+            if (!color) {
+                color = `rgb(255,255,255)`;
+            }
+            ctxRef.current.fillStyle = color;
+            ctxRef.current.fillRect(Math.floor(x * tileSize), Math.floor((y+5) * tileSize), tileSize, tileSize);
+        } else console.log("no ref");
     }
 
     const drawTileMap = function (colorArr) {
         if (ctxRef.current) {
             // 绘制所有的 tile
+            clearTileMap();
             for (let y = 0; y < size; y += 1) {
                 for (let x = 0; x < size; x += 1) {
                     drawTile(x, y, colorArr[x][y] ? "black" : "white");
                 }
             }
-        }else console.log("no ref");
+        } else console.log("no ref");
+    }
+    function clearTileMap() {
+        if (ctxRef.current) {
+            for (let y = -5; y < (size+5); y += 1) {
+                for (let x = 0; x < size; x += 1) {
+                    drawTile(x, y, "white");
+                }
+            }
+        }
+    }
+    function drawGroupFrame(currentFrameTime){
+        if(ctxRef.current){
+            let allGroup = monster.allGroup;
+            clearTileMap();
+            for (let i = 0; i < allGroup.groups.length; i++) {
+                const arr = allGroup.groups[i].arr;
+                let offset = Math.sin(currentFrameTime/250 + allGroup.groups[i].start_time*4.0)*20/tileSize ;
+                for (let j = 0; j < arr.length; j++) {
+                    const p = arr[j].position;
+                    const c = arr[j].color;
+                    if (monster.getAtPos(monster.tileMap, [p.x, p.y]) !== null) {
+                        drawTile(p.x, p.y+offset, `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})`)
+                    }
+                }
+            }
+            for (let i = 0; i < allGroup.negative_groups.length; i++) {
+                if (allGroup.negative_groups[i].valid === false) continue;
+                const arr = allGroup.negative_groups[i].arr;
+                let offset = Math.sin(currentFrameTime/250 + allGroup.negative_groups[i].start_time*4.0)*20/tileSize ;
+                for (let j = 0; j < arr.length; j++) {
+                    const p = arr[j].position;
+                    const c = arr[j].color;
+                    if (monster.getAtPos(monster.tileMap, [p.x, p.y]) !== null) {
+                        drawTile(p.x, p.y+offset, `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})`)
+                    }
+                }
+            }
+
+            frameRequest.current = requestAnimationFrame(drawGroupFrame);
+        }
+        
     }
 
     function drwaGroup(allGroup) {
         if (ctxRef.current) {
-            // console.log(allGroup);
-            for(let i=0;i<allGroup.groups.length;i++){
-                const arr = allGroup.groups[i].arr;
-                for(let j=0;j<arr.length;j++){
-                    const p = arr[j].position ;
+            clearTileMap();
+            for (let i = 0; i < allGroup.negative_groups.length; i++) {
+                if (allGroup.negative_groups[i].valid === false) continue;
+                const arr = allGroup.negative_groups[i].arr;
+                for (let j = 0; j < arr.length; j++) {
+                    const p = arr[j].position;
                     const c = arr[j].color;
-                    if(monster.getAtPos(monster.tileMap,[p.x,p.y])!== null){
-                        drawTile(p.x,p.y,`rgb(${c[0]*255},${c[2]*255},${c[2]*255})`)
+                    if (monster.getAtPos(monster.tileMap, [p.x, p.y]) !== null) {
+                        drawTile(p.x, p.y, `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})`)
                     }
                 }
             }
-            for(let i=0;i<allGroup.negative_groups.length;i++){
-                const arr = allGroup.negative_groups[i].arr;
-                for(let j=0;j<arr.length;j++){
-                    const p = arr[j].position ;
+            for (let i = 0; i < allGroup.groups.length; i++) {
+                const arr = allGroup.groups[i].arr;
+                for (let j = 0; j < arr.length; j++) {
+                    const p = arr[j].position;
                     const c = arr[j].color;
-                    if(monster.getAtPos(monster.tileMap,[p.x,p.y])!== null){
-                        drawTile(p.x,p.y,`rgb(${c[0]*255},${c[2]*255},${c[2]*255})`)
+                    if (monster.getAtPos(monster.tileMap, [p.x, p.y]) !== null) {
+                        drawTile(p.x, p.y, `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})`)
                     }
                 }
             }
@@ -79,9 +124,21 @@ export function ClickGame() {
 
                 console.log('Clicked on tile:', clickedTileX, ',', clickedTileY);
                 console.log(draw.current);
-                if (draw.current%2 === 0 ) drwaGroup(monster.allGroup);
-                if (draw.current%2 === 1 ) {monster.generate({ x: size, y: size } );drawTileMap(monster.tileMap);}
-                draw.current += 1 ;
+                if (draw.current % 2 === 0) {
+                    //drwaGroup(monster.allGroup);
+                    frameRequest.current = requestAnimationFrame(drawGroupFrame);
+                }
+                if (draw.current % 2 === 1) {
+                    cancelAnimationFrame(frameRequest.current);
+                    monster.generate({ x: size, y: size });
+                    SetMonsterName(monster.name);
+                    drawTileMap(monster.tileMap);
+                    setScheme(monster.scheme);
+                }
+                draw.current += 1;
+            }
+            if (ctxRef.current) {
+                drawTileMap(monster.tileMap);
             }
             // 监听 Canvas 元素的 click 事件
             canvasRef.current.addEventListener('click', clickFn);
@@ -92,17 +149,39 @@ export function ClickGame() {
         }
     }, [])
 
-    useEffect(() => {
-        console.log(">>>tilemap changed");
-        if (ctxRef.current) {
-            drawTileMap(monster.tileMap);
-        }
-    }, [monster])
+    // useEffect(() => {
+    //     console.log(">>>tilemap changed");
+    //     if (ctxRef.current) {
+    //         drawTileMap(monster.tileMap);
+    //     }
+    // }, [monster])
+
     return (
         <div>
             <div >Click Game</div>
             <div>
-                <canvas ref={canvasRef} height={size * tileSize} width={size * tileSize}></canvas>
+                <div width="80%">{monsterName}</div>
+                <canvas ref={canvasRef} height={(size+10) * tileSize} width={size * tileSize}></canvas>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(8, 50px)" }}>{scheme.map((c, index) => (
+                    <div
+                        key={index}
+                        style={{
+                            height: "50px",
+                            width: "50px",
+                            backgroundColor: `rgb(${c[0] * 255}, ${c[1] * 255}, ${c[2] * 255})`
+                        }}
+                    ></div>
+                ))}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(8, 50px)" }}>{monster.eyeScheme.map((c, index) => (
+                    <div
+                        key={index}
+                        style={{
+                            height: "50px",
+                            width: "50px",
+                            backgroundColor: `rgb(${c[0] * 255}, ${c[1] * 255}, ${c[2] * 255})`
+                        }}
+                    ></div>
+                ))}</div>
             </div>
         </div>
     )
