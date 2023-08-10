@@ -28,7 +28,7 @@ class Noise2D {
 }
 
 export class Monster {
-    name ;
+    name;
     birth_limit = 5; //5
     death_limit = 4; //4
     n_steps = 4; //4
@@ -40,11 +40,17 @@ export class Monster {
     constructor(size) {
         console.log(">>>Monster init check");
         this.generate(size ? { x: size, y: size } : { x: 32, y: 32 });
+
+        //status 
+        this.level = 0;
+        this.maxHp = 100;
+        this.hp = this.maxHp;
+        this.dps = 10;
+        this.click = 30;
     }
 
     generate(size) {
-        this.randomSeed = [Math.floor(Math.random() * 100000) , Math.floor(Math.random() * 100000)] ;
-        //this.randomSeed = [1,2];
+        this.randomSeed = [Math.floor(Math.random() * 100000), Math.floor(Math.random() * 100000)];
         this.noise = new Noise2D(this.randomSeed[0]);
         this.noise2 = new Noise2D(this.randomSeed[1]);
 
@@ -66,6 +72,23 @@ export class Monster {
         this.allGroup = this.fillColor(this.tileMap, this.scheme, this.eyeScheme, this.n_colors, this.outline);
         this.filterGroup(this.allGroup);
         this.g_draw = null;
+
+    }
+    getDamage(dmg) {
+        this.hp -= dmg;
+        if (this.hp <= 0) {
+            this.levelUp();
+            return true
+        }
+        return false
+    }
+    levelUp() {
+        this.maxHp *= 1.2;
+        this.hp = this.maxHp;
+        this.level += 1;
+        this.dps *= 1.1;
+        this.click *= 1.1;
+        this.generate(this.size);
     }
 
     //map generate
@@ -450,7 +473,7 @@ export class Monster {
                 //         return true;
                 // }
                 if (Math.abs(g1[i].position.x - g2[j].position.x) + Math.abs(g1[i].position.y - g2[j].position.y) <= 2) //<=1,原作者逻辑复杂了，这就是汉明距离
-                    return true ;
+                    return true;
             }
         return false;
     }
@@ -465,8 +488,8 @@ export class Monster {
         const ages = ["Old", "Fresh", "Crusty", "New", "Ancient", "Broken", "Fossilized", "Crisp", "Aged", "Fermented"];
         const things = ["Feather", "Sandals", "Gem", "Orb", "Dust", "Book", "Amulet", "Heart", "Finger", "Pencil", "Weapon", "Vitamins", "Calculator", "Cloud", "Overlord", "Bottle", "Branch", "Bag", "Alien", "Fire", "Fork", "Sculpture", "Soul", "Toothbrush"];
         const other = ["Destruction", "Chaos", "Equality", "Electricity", "Speed", "Mutations", "Agression", "Worship", "Silence", "Illusion", "Purifying", "Growing", "Breaking", "Secrets"];
-        const text_add = {materials, foods, flavors, sizes, properties, colors, ages}
-        const can_add = [text_add.materials,text_add.foods,text_add.flavors,text_add.sizes,text_add.properties,text_add.ages]
+        const text_add = { materials, foods, flavors, sizes, properties, colors, ages }
+        const can_add = [text_add.materials, text_add.foods, text_add.flavors, text_add.sizes, text_add.properties, text_add.ages]
         let name_string = "";
         let has_added = [];
 
@@ -527,11 +550,11 @@ export class Monster {
      * @param {*} A 上下运动的幅度,0是静止图片
      * @returns [x,y]->[x,y+2*A]
      */
-    generateColorTilemap(currentFrameTime,A = 0){
+    generateColorTilemap(currentFrameTime, A = 0) {
         let colorTileMap = []
-        for (let x = 0; x < this.size.x ; x += 1) {
+        for (let x = 0; x < this.size.x; x += 1) {
             let lines = []
-            for (let y = 0; y < this.size.y + 2*A; y += 1) {
+            for (let y = 0; y < this.size.y + 2 * A; y += 1) {
                 lines.push('white');
             }
             colorTileMap.push(lines);
@@ -539,27 +562,27 @@ export class Monster {
 
         for (let i = 0; i < this.allGroup.groups.length; i++) {
             const arr = this.allGroup.groups[i].arr;
-            let offset = Math.floor(Math.sin(currentFrameTime/250 + this.allGroup.groups[i].start_time*4.0)*A + A) ;
+            let offset = Math.floor(Math.sin(currentFrameTime / 250 + this.allGroup.groups[i].start_time * 4.0) * A + A);
             for (let j = 0; j < arr.length; j++) {
                 const p = arr[j].position;
                 const c = arr[j].color;
                 if (this.getAtPos(this.tileMap, [p.x, p.y]) !== null) {
-                    colorTileMap[p.x][p.y+offset] = `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})` ;
+                    colorTileMap[p.x][p.y + offset] = `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})`;
                 }
             }
         }
         for (let i = 0; i < this.allGroup.negative_groups.length; i++) {
             if (this.allGroup.negative_groups[i].valid === false) continue;
             const arr = this.allGroup.negative_groups[i].arr;
-            let offset = Math.floor(Math.sin(currentFrameTime/250 + this.allGroup.negative_groups[i].start_time*4.0)*A + A);
+            let offset = Math.floor(Math.sin(currentFrameTime / 250 + this.allGroup.negative_groups[i].start_time * 4.0) * A + A);
             for (let j = 0; j < arr.length; j++) {
                 const p = arr[j].position;
                 const c = arr[j].color;
                 if (this.getAtPos(this.tileMap, [p.x, p.y]) !== null) {
-                    colorTileMap[p.x][p.y+offset] = `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})`;
+                    colorTileMap[p.x][p.y + offset] = `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})`;
                 }
             }
         }
-        return colorTileMap ;
+        return colorTileMap;
     }
 }
