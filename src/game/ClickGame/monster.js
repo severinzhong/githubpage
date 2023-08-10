@@ -43,8 +43,10 @@ export class Monster {
     }
 
     generate(size) {
-        this.noise = new Noise2D(Math.floor(Math.random() * 100000));
-        this.noise2 = new Noise2D(Math.floor(Math.random() * 100000));
+        this.randomSeed = [Math.floor(Math.random() * 100000) , Math.floor(Math.random() * 100000)] ;
+        //this.randomSeed = [1,2];
+        this.noise = new Noise2D(this.randomSeed[0]);
+        this.noise2 = new Noise2D(this.randomSeed[1]);
 
         this.noise2.octaves = 3;
         this.noise2.period = 40.0;
@@ -401,8 +403,8 @@ export class Monster {
         }
 
         for (let i = groups.length - 1; i >= 0; i--) {
-            groups[i].start_time = groups[i].arr.length + groups.length;
-            if (groups[i].arr.length < largest * 0.25) {
+            groups[i].start_time = groups[i].arr.length + groups.length; // 开始事件和arr的大小相关，那么在对称的时候可以让他们开始时间相同
+            if (groups[i].arr.length < this.size.x * this.size.y * 0.03) { //<largest * 0.25 in origin 
                 groups.splice(i, 1);
             }
         }
@@ -439,14 +441,16 @@ export class Monster {
     groupIsTouchingGroup(g1, g2) {
         for (let i = 0; i < g1.length; i++)
             for (let j = 0; j < g2.length; j++) {
-                if (g1[i].position.x === g2[j].position.x) {
-                    if (g1[i].position.y === g2[j].position.y + 1 || g1[i].position.y === g2[j].position.y - 1)
-                        return true;
-                }
-                else if (g1[i].position.y === g2[j].position.y) {
-                    if (g1[i].position.x === g2[j].position.x + 1 || g1[i].position.y === g2[j].position.x - 1)
-                        return true;
-                }
+                // if (g1[i].position.x === g2[j].position.x) {
+                //     if (g1[i].position.y === g2[j].position.y + 1 || g1[i].position.y === g2[j].position.y - 1)
+                //         return true;
+                // }
+                // else if (g1[i].position.y === g2[j].position.y) {
+                //     if (g1[i].position.x === g2[j].position.x + 1 || g1[i].position.y === g2[j].position.x - 1)
+                //         return true;
+                // }
+                if (Math.abs(g1[i].position.x - g2[j].position.x) + Math.abs(g1[i].position.y - g2[j].position.y) <= 2) //<=1,原作者逻辑复杂了，这就是汉明距离
+                    return true ;
             }
         return false;
     }
@@ -517,6 +521,45 @@ export class Monster {
         }
         return name_string;
     }
+    /**
+     * 生成时序相关的彩色colerTileMap
+     * @param {*} currentFrameTime 当前帧
+     * @param {*} A 上下运动的幅度,0是静止图片
+     * @returns [x,y]->[x,y+2*A]
+     */
+    generateColorTilemap(currentFrameTime,A = 0){
+        let colorTileMap = []
+        for (let x = 0; x < this.size.x ; x += 1) {
+            let lines = []
+            for (let y = 0; y < this.size.y + 2*A; y += 1) {
+                lines.push('white');
+            }
+            colorTileMap.push(lines);
+        }
 
-
+        for (let i = 0; i < this.allGroup.groups.length; i++) {
+            const arr = this.allGroup.groups[i].arr;
+            let offset = Math.floor(Math.sin(currentFrameTime/250 + this.allGroup.groups[i].start_time*4.0)*A + A) ;
+            for (let j = 0; j < arr.length; j++) {
+                const p = arr[j].position;
+                const c = arr[j].color;
+                if (this.getAtPos(this.tileMap, [p.x, p.y]) !== null) {
+                    colorTileMap[p.x][p.y+offset] = `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})` ;
+                }
+            }
+        }
+        for (let i = 0; i < this.allGroup.negative_groups.length; i++) {
+            if (this.allGroup.negative_groups[i].valid === false) continue;
+            const arr = this.allGroup.negative_groups[i].arr;
+            let offset = Math.floor(Math.sin(currentFrameTime/250 + this.allGroup.negative_groups[i].start_time*4.0)*A + A);
+            for (let j = 0; j < arr.length; j++) {
+                const p = arr[j].position;
+                const c = arr[j].color;
+                if (this.getAtPos(this.tileMap, [p.x, p.y]) !== null) {
+                    colorTileMap[p.x][p.y+offset] = `rgb(${c[0] * 255},${c[1] * 255},${c[2] * 255})`;
+                }
+            }
+        }
+        return colorTileMap ;
+    }
 }
