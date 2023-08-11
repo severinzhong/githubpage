@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Monster } from "./monster";
+import { Item } from "./item";
 export function ClickGame() {
     const size = 45;
     const [monsterName, setMonsterName] = useState('');
@@ -9,9 +10,10 @@ export function ClickGame() {
     const A = 5;
     const canvasRef = useRef();
     const ctxRef = useRef(null);
-    const frameRequest = useRef(null)
-
-
+    const frameRequest = useRef(null);
+    const [slot,setSlot] = useState(null);
+    const [bag,setBag] = useState(null);
+    //console.log("render" , performance.now())
     useEffect(() => {
         function drawTile(x, y, color) {
             if (ctxRef) {
@@ -43,12 +45,40 @@ export function ClickGame() {
         let lastFrameTime = performance.now();
         let lazyFrameTime = performance.now();
         let monster = new Monster(size);
+        let item = new Item() ;
+        let msg = " ";
+        function updateUI(text){
+            if(text)msg = text ;
+            setMonsterName(`${monster.name} LV. ${monster.level}`);
+            setMessage(
+`HP  ${monster.hp.toFixed(0)}/${monster.maxHp.toFixed(0)} 
+clickDmg  ${monster.click.toFixed(0)} + ${item.click.toFixed(0)}  idleDMG   ${monster.dps.toFixed(0)} + ${item.dps.toFixed(0)}
+${msg}
+` );
+            setSlot(
+                ()=>item.slots?.map((obj,idx)=>(
+                    <div key={idx}>
+                        {item.getStringItem(obj)}
+                    </div>                    
+                    ))
+            )
+            setBag(
+                ()=>item.items?.map((obj,idx)=>(
+                    <div key={idx} style={{display:"flex"}}>
+                        {item.getStringItem(obj)}
+                        <button onClick={()=>{item.equip(idx);}}  style={{marginLeft:"auto"}}>装备</button>
+                    </div>                    
+                    ))
+            );
+        }
         function drawGroupFrame(currentFrameTime) {
+            //console.log(">>frame",currentFrameTime);
             if (ctxRef.current) {
                 drawTileMap(monster.generateColorTilemap(currentFrameTime, A));
-                if (monster.getDamage((currentFrameTime - lastFrameTime) / 1000 * monster.dps) || currentFrameTime - lazyFrameTime > 100) {
-                    setMonsterName(`${monster.name} LV. ${monster.level}`);
-                    setMessage(`HP  ${monster.hp.toFixed(0)}/${monster.maxHp.toFixed(0)}`);
+                let isDead = monster.getDamage((currentFrameTime - lastFrameTime) / 1000 * (monster.dps + item.dps )) ;
+                let drop = isDead && Math.random()>0.2;
+                if ( isDead || currentFrameTime - lazyFrameTime > 250 ) {
+                    updateUI(drop ? `${item.generate(monster.level)} Dropped by idleDMG` : null) ;
                     lazyFrameTime = currentFrameTime;
                 }
 
@@ -78,12 +108,14 @@ export function ClickGame() {
 
                     console.log('Clicked on tile:', clickedTileX, ',', clickedTileY);
                 }
-                monster.getDamage(monster.click)
+                let isDead = monster.getDamage(monster.click + item.click)
+                let drop = isDead || Math.random()>0.9;
+                updateUI(drop ? `${item.generate(monster.level)} dropped by click`:null);
                 console.log(draw.current);
                 draw.current += 1;
             }
             if (ctxRef.current) {
-                setMonsterName(`${monster.name} LV. ${monster.level}`);
+                updateUI("Game Start !");
                 frameRequest.current = requestAnimationFrame(drawGroupFrame);
 
             }
@@ -103,7 +135,11 @@ export function ClickGame() {
             <div>
                 <div width="80%">{monsterName}</div>
                 <canvas ref={canvasRef} height={(size + 2 * A) * tileSize} width={size * tileSize}></canvas>
-                <div>{message}</div>
+                <div  style={{whiteSpace: "pre-wrap"}}>{message}</div>
+                <div>EQUIPMENT</div>
+                {slot}
+                <div>ITEMS</div>
+                {bag}
             </div>
         </div>
     )
